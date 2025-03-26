@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:trip_planner_ui/presenter/login/login_presenter.dart';
+import 'package:trip_planner_ui/presentation/login/login_presenter.dart';
 import 'package:trip_planner_ui/views/login/login_form.dart';
 
 class LoginScreen extends StatelessWidget {
+  static const String screenName = 'login_screen';
   const LoginScreen({super.key});
 
   @override

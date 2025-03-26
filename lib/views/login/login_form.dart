@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
-import 'package:trip_planner_ui/presenter/login/login_presenter.dart';
-import 'package:trip_planner_ui/views/widgets/my_button.dart';
-import 'package:trip_planner_ui/views/widgets/my_textfield.dart';
+import 'package:go_router/go_router.dart';
+import 'package:trip_planner_ui/presentation/login/login_presenter.dart';
+import 'package:trip_planner_ui/views/widgets/widgets.dart';
 
 class LoginForm extends StatelessWidget {
   const LoginForm({
@@ -45,15 +45,16 @@ class LoginForm extends StatelessWidget {
               const SizedBox(height: 15),
               MyButton(
                   onTap: () {
-                    _presenter.login(emailController.toString(),
-                        passwordController.toString());
+                    context.pushNamed('home_screen');
                   },
                   text: 'Iniciar Sesion'),
             ],
           ),
           const SizedBox(height: 20),
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              context.pushNamed('register_screen');
+            },
             child: const Text.rich(
               TextSpan(
                 text: 'No tienes cuenta? ',

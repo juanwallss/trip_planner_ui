@@ -1,0 +1,2 @@
+C:/Users/jcpgo/OneDrive/Documents/Tec/trip_project/trip_planner_ui/android/app/.cxx/Debug/5u1l2ev3/x86/CMakeFiles/edit_cache.dir
+C:/Users/jcpgo/OneDrive/Documents/Tec/trip_project/trip_planner_ui/android/app/.cxx/Debug/5u1l2ev3/x86/CMakeFiles/rebuild_cache.dir
