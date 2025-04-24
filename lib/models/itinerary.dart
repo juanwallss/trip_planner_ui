@@ -1,21 +1,20 @@
 import 'package:trip_planner_ui/models/activity.dart';
-import 'package:trip_planner_ui/models/itinerary_list.dart';
 
 class Itinerary {
   final int id;
-  final String nombre;
+  final String titulo;
   final String descripcion;
   final String destino;
   final String fechaInicio;
   final String fechaFin;
   final double latitud;
   final double longitud;
-  final int usuarioId;
+  final String usuarioId;
   List<Activity> activities = [];
 
   Itinerary(
       {required this.id,
-      required this.nombre,
+      required this.titulo,
       required this.descripcion,
       required this.destino,
       required this.fechaInicio,
@@ -27,7 +26,7 @@ class Itinerary {
   static Itinerary fromJson(Map<String, dynamic> json) {
     return Itinerary(
       id: json['id'],
-      nombre: json['nombre'],
+      titulo: json['titulo'],
       descripcion: json['descripcion'],
       destino: json['destino'],
       fechaInicio: json['fechaInicio'],

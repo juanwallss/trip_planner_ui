@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:trip_planner_ui/presentation/login/login_presenter.dart';
 import 'package:trip_planner_ui/views/login/login_form.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -8,18 +7,13 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
-    final LoginPresenter _presenter = LoginPresenter();
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            TopLoginScreen(size: size),
-            LoginForm(emailController: emailController, passwordController: passwordController, presenter: _presenter),
+            const TopLoginScreen(),
+            LoginForm(),
           ],
         ),
       ),
@@ -29,26 +23,23 @@ class LoginScreen extends StatelessWidget {
 
 
 class TopLoginScreen extends StatelessWidget {
-  const TopLoginScreen({
-    super.key,
-    required this.size,
-  });
-
-  final Size size;
+  const TopLoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final size = MediaQuery.of(context).size;
     return SizedBox(
       height: size.height * 0.4,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
+          Text(
             'Trip Planner',
             style: TextStyle(
               fontSize: 48,
               fontWeight: FontWeight.bold,
-              color: Colors.green,
+              color: colors.primary,
             ),
           ),
           Image.asset(

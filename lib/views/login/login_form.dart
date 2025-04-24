@@ -1,53 +1,75 @@
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trip_planner_ui/presentation/login/login_presenter.dart';
 import 'package:trip_planner_ui/views/widgets/widgets.dart';
 
-class LoginForm extends StatelessWidget {
-  const LoginForm({
-    super.key,
-    required this.emailController,
-    required this.passwordController,
-    required LoginPresenter presenter,
-  }) : _presenter = presenter;
+class LoginForm extends StatefulWidget {
+  LoginForm({super.key});
+  final LoginPresenter presenter = LoginPresenter();
 
-  final TextEditingController emailController;
-  final TextEditingController passwordController;
-  final LoginPresenter _presenter;
+
+  @override
+  _LoginFormState createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+
+    emailController.text = '';
+    passwordController.text = '';
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return SizedBox(
       child: Column(
         children: [
           Column(
             children: [
               const SizedBox(height: 20),
-              const Text(
-                'Iniciar Sesion',
+              Text(
+                'Iniciar Sesión',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.green,
+                  color: colors.primary,
                 ),
               ),
               const SizedBox(height: 10),
               MyTextField(
-                  controller: emailController,
-                  hintText: 'Email',
-                  obscureText: false),
+                controller: emailController,
+                hintText: 'Email',
+                obscureText: false,
+              ),
               const SizedBox(height: 15),
               MyTextField(
-                  controller: passwordController,
-                  hintText: 'Contraseña',
-                  obscureText: true),
+                controller: passwordController,
+                hintText: 'Contraseña',
+                obscureText: true,
+              ),
               const SizedBox(height: 15),
               MyButton(
-                  onTap: () {
-                    context.pushNamed('home_screen');
-                  },
-                  text: 'Iniciar Sesion'),
+                onTap: () {
+                  widget.presenter.login(
+                      emailController.text, passwordController.text, context);
+                },
+                text: 'Iniciar Sesión',
+              ),
             ],
           ),
           const SizedBox(height: 20),

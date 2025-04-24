@@ -6,7 +6,7 @@ class ApiService {
 
   static const String token = '';
 
-  Future<Map<String, dynamic>> post(String endpoint, Map<String, dynamic> data,
+  Future<http.Response> post(String endpoint, Map<String, dynamic> data,
       {bool useToken = false}) async {
     try {
       final response = await http.post(
@@ -17,22 +17,22 @@ class ApiService {
         },
         body: jsonEncode(data),
       );
-      return jsonDecode(response.body);
+      return response;
     } catch (e) {
       print(e);
-      return {};
+      return http.Response('Error', 500);
     }
   }
 
-  Future<Map<String, dynamic>> get(String endpoint) async {
+  Future<http.Response> get(String endpoint) async {
     final response = await http.get(
       Uri.parse("$baseUrl/$endpoint"),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
+        // "Authorization": "Bearer $token",
       },
     );
-    return jsonDecode(response.body);
+    return response;
   }
 
   Future<Map<String, dynamic>> delete(String endpoint) async {

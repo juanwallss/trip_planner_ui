@@ -6,8 +6,12 @@ import 'package:location/location.dart' as loc;
 import 'package:geocoding/geocoding.dart' as geo;
 import 'dart:async';
 
+import 'package:trip_planner_ui/views/widgets/my_textfield.dart';
+
 class MapWidget extends StatefulWidget {
-  const MapWidget({super.key});
+  final Function(Map<String,Object>) onLocationSelected; // Callback to return location
+
+  const MapWidget({super.key, required this.onLocationSelected});
 
   @override
   _MapWidgetState createState() => _MapWidgetState();
@@ -29,7 +33,7 @@ class _MapWidgetState extends State<MapWidget> {
     super.initState();
   }
 
-  Future<void> searchLocation(String cityName) async {
+  Future<Map<String, Object>> searchLocation(String cityName) async {
     try {
       List<geo.Location> locations = await geo.locationFromAddress(cityName);
       if (locations.isNotEmpty) {
@@ -45,10 +49,26 @@ class _MapWidgetState extends State<MapWidget> {
         setState(() {
           _currentPosition = newLatLng;
         });
+
+        widget.onLocationSelected(
+          {
+            "latitude": location.latitude,
+            "longitude": location.longitude,
+            "city": cityName,
+          },
+        );
+
+        return {
+          "latitude": location.latitude,
+          "longitude": location.longitude,
+          "city": cityName,
+        };
       }
     } catch (e) {
       print("Error al obtener la ubicación: $e");
     }
+    throw Exception(
+        "No se pudo encontrar la ubicación para la ciudad: $cityName");
   }
 
   @override
@@ -62,33 +82,9 @@ class _MapWidgetState extends State<MapWidget> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    return Scaffold(
-      body: Column(
+    final size = MediaQuery.of(context).size;
+    return Column(
         children: [
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: Row(
-          //     children: [
-          //       Expanded(
-          //         child: TextField(
-          //           controller: _searchController,
-          //           decoration: InputDecoration(
-          //             hintText: "Ingrese una ciudad",
-          //             border: OutlineInputBorder(
-          //                 borderRadius: BorderRadius.circular(15)),
-          //           ),
-          //         ),
-          //       ),
-          //       IconButton(
-          //         icon: Icon(Icons.search),
-          //         onPressed: () {
-          //           searchLocation(_searchController.text);
-          //         },
-          //       )
-          //     ],
-          //   ),
-          // ),
-          const SizedBox(height: 10),
           Expanded(
             child: GoogleMap(
               initialCameraPosition: initialCameraPosition,
@@ -231,8 +227,16 @@ class _MapWidgetState extends State<MapWidget> {
                   : {},
             ),
           ),
+          SizedBox(height: size.height * .03),
+          MyTextField(
+            controller: _searchController,
+            hintText: 'Buscar ciudad',
+            icon: Icons.search,
+            onIconPressed: () {
+              searchLocation(_searchController.text);
+            },
+          ),
         ],
-      ),
     );
   }
 }

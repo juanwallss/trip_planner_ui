@@ -9,11 +9,6 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-
-    final emailController = TextEditingController();
-    final nombreController = TextEditingController();
-    final passwordController = TextEditingController();
-    final confirmPasswordController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -24,12 +19,7 @@ class RegisterScreen extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        child: RegisterForm(
-          nombreController: nombreController,
-          emailController: emailController,
-          passwordController: passwordController,
-          confirmPasswordController: confirmPasswordController,
-        ),
+        child: RegisterForm(),
       ),
     );
   }

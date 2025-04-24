@@ -1,15 +1,15 @@
-class Usuario {
+class UserModel {
   final int id;
   final String nombre;
-  final String email;
+  final String token;
 
-  Usuario({required this.id, required this.nombre, required this.email});
+  UserModel({required this.id, required this.nombre, required this.token});
 
-  factory Usuario.fromJson(Map<String, dynamic> json) {
-    return Usuario(
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
       id: json['id'],
       nombre: json['nombre'],
-      email: json['email'],
+      token: json['token'],
     );
   }
 }

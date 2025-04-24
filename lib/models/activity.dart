@@ -1,3 +1,4 @@
+
 class Activity {
   final int itineraryId;
   final String titulo;
@@ -6,4 +7,6 @@ class Activity {
   final String hora;
 
   Activity({required this.itineraryId, required this.titulo, required this.descripcion, required this.fecha, required this.hora});
+
+  // static Itinerary fromJson(activityJson) {}
 }
