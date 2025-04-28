@@ -12,4 +12,12 @@ class UserModel {
       token: json['token'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'nombre': nombre,
+      'token': token,
+    };
+  }
 }

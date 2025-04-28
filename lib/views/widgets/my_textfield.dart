@@ -7,6 +7,8 @@ class MyTextField extends StatelessWidget {
   final String? errorText;
   final IconData? icon; // Optional icon
   final VoidCallback? onIconPressed; // Action for the icon
+  final double? width; // Optional width
+  final bool disabled; // Disabled option
 
   const MyTextField({
     super.key,
@@ -14,8 +16,10 @@ class MyTextField extends StatelessWidget {
     required this.hintText,
     this.obscureText = false,
     this.errorText,
-    this.icon, // Initialize optional icon
-    this.onIconPressed, // Initialize optional action
+    this.icon,
+    this.onIconPressed,
+    this.width,
+    this.disabled = false, // Default to false
   });
 
   @override
@@ -25,6 +29,7 @@ class MyTextField extends StatelessWidget {
 
     return SizedBox(
       height: height,
+      width: width, // Use the provided width if available
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25),
         child: Column(
@@ -44,6 +49,7 @@ class MyTextField extends StatelessWidget {
               child: TextField(
                 controller: controller,
                 obscureText: obscureText,
+                enabled: !disabled, // Disable the field if `disabled` is true
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
@@ -57,14 +63,16 @@ class MyTextField extends StatelessWidget {
                     ),
                   ),
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: disabled
+                      ? Colors.grey[300]
+                      : Colors.white, // Change background if disabled
                   hintText: hintText,
                   hintStyle: const TextStyle(color: Colors.black, fontSize: 15),
                   errorText: errorText, // Display error text
                   suffixIcon: icon != null
                       ? IconButton(
                           icon: Icon(icon, color: colors.primary),
-                          onPressed: onIconPressed,
+                          onPressed: disabled ? null : onIconPressed,
                         )
                       : null, // Add optional icon button
                 ),

@@ -66,6 +66,14 @@ class _MapWidgetState extends State<MapWidget> {
       }
     } catch (e) {
       print("Error al obtener la ubicación: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Error al obtener la ubicación, favor de verificar el nombre de la ciudad'),
+          duration: Duration(seconds: 3),
+          backgroundColor: Color.fromARGB(255, 172, 12, 1),
+        ),
+      );
+      
     }
     throw Exception(
         "No se pudo encontrar la ubicación para la ciudad: $cityName");

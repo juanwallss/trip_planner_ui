@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:trip_planner_ui/views/itinerary/itinerary_form.dart';
 
 class ItineraryScreen extends StatelessWidget {
@@ -12,16 +13,7 @@ class ItineraryScreen extends StatelessWidget {
         centerTitle: true,
         title: const Text('Crea tu itinerario'),
       ),
-      body: const ItineraryForm(),
-      persistentFooterButtons: [
-        ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text('Cancelar'),
-        ),
-        ElevatedButton(onPressed: () {}, child: const Text('Guardar')),
-      ],
+      body: ItineraryForm(),
     );
   }
 }

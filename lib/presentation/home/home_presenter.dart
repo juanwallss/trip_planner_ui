@@ -41,6 +41,7 @@ class HomePresenter {
       return itineraries.cast<Itinerary>();
     } else {
       print('Error fetching itineraries: ${response.statusCode}');
+      print('Response body: ${response.body}');
     }
 
     return [];
