@@ -1,52 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:trip_planner_ui/models/itinerary.dart';
 import 'package:trip_planner_ui/presentation/home/home_presenter.dart';
+import 'package:trip_planner_ui/provider/itinerary_provider.dart';
 import 'package:trip_planner_ui/views/widgets/widgets.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   static const String screenName = 'home_screen';
 
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final presenter = HomePresenter(ref);
-    presenter.getUser();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
 
-    final itinerariesFuture = presenter.getItineraries();
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  late final HomePresenter presenter;
+  late Future<List<Itinerary>> itinerariesFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    presenter = HomePresenter(ref);
+    presenter.getUser();
+    itinerariesFuture = presenter.getItineraries();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var itineraries = ref.watch(itinerariesProvider);
+
+    // if (itineraries.isEmpty) {
+    //   itineraries = presenter.getItineraries() as List<Itinerary>;
+    // }
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Itinerarios',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600)),
+        title: const Text('Itinerarios'),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.logout_rounded),
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text('Cerrar sesión'),
-                  content: const Text('¿Estás seguro de que quieres cerrar sesión?'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        context.pop();
-                      },
-                      child: const Text('Cancelar'),
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        await presenter.logOut(context);
-                      },
-                      child: const Text('Cerrar sesión'),
-                    ),
-                  ],
-                );
-              },
-            );
-          },
+          onPressed: () => _showLogoutDialog(context),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -56,43 +56,71 @@ class HomeScreen extends ConsumerWidget {
         child: const Icon(Icons.add),
       ),
       body: Center(
-        child: FutureBuilder(
-          future: itinerariesFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else if (snapshot.hasData) {
-              final itineraries = snapshot.data!;
-              if (itineraries.isEmpty) {
-                return const Text(
-                  'Crea tu primer Itinerario!',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                );
-              }
-              return ListView(
+        child: itineraries.isEmpty
+            ? const Text(
+                'Crea tu primer Itinerario!',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              )
+            : ListView(
                 children: itineraries.map((itinerary) {
                   return CardWidget(
                     title: itinerary.titulo,
                     subtitle: itinerary.descripcion,
                     onEdit: () {
-                      // Add edit logic here
+                      context.pushNamed(
+                        'itinerary_detail_screen',
+                        pathParameters: {'id': itinerary.id.toString()},
+                      );
                     },
                     onDelete: () {
-                      // Add delete logic here
+                      // TODO: Implement delete
+                      _showDeleteDialog(context, itinerary.id);
                     },
                   );
                 }).toList(),
-              );
-            } else {
-              return const Text(
-                'Crea tu primer Itinerario!',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-              );
-            }
-          },
-        ),
+              ),
+      ),
+    );
+  }
+
+  void _showDeleteDialog(BuildContext context, int? id) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Eliminar Itinerario'),
+        content: const Text('¿Estás seguro de que quieres eliminar este itinerario?'),
+        actions: [
+          TextButton(
+            onPressed: () => context.pop(),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () async {
+              presenter.deleteItinerary(id, context);
+            },
+            child: const Text('Eliminar'),  
+          ),
+        ],
+      ),);}
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Cerrar sesión'),
+        content: const Text('¿Estás seguro de que quieres cerrar sesión?'),
+        actions: [
+          TextButton(
+            onPressed: () => context.pop(),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () async {
+              await presenter.logOut(context);
+            },
+            child: const Text('Cerrar sesión'),
+          ),
+        ],
       ),
     );
   }

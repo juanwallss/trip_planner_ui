@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -143,6 +145,7 @@ class _ItineraryFormState extends ConsumerState<ItineraryForm> {
                         context: context,
                         builder: (context) => ActivityDialog(
                           maxDate: toDateController!,
+                          minDate: fromDateController!,
                         ),
                       );
                       if (newActivity != null) {
@@ -188,7 +191,7 @@ class _ItineraryFormState extends ConsumerState<ItineraryForm> {
 
                 print('Itinerary Data: ${itineraryData.toJson()}');
                 Future<bool> success =
-                    widget.presenter.createItinerary(itineraryData, user!);
+                    widget.presenter.createItinerary(itineraryData, user!, ref);
                 if (await success) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -197,7 +200,7 @@ class _ItineraryFormState extends ConsumerState<ItineraryForm> {
                       backgroundColor: Colors.green,
                     ),
                   );
-                  // context.pop();
+                  context.pop();
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

@@ -14,7 +14,7 @@ class LoginPresenter {
     final response = await apiService
         .post('auth/login', {"email": email, "contraseña": password});
 
-    final responseBody = jsonDecode(response.body);
+    final responseBody  = jsonDecode(response.body);
     if (response.statusCode == 200) {
       final UserModel user = UserModel.fromJson(responseBody);
       setUser(user);

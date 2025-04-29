@@ -4,9 +4,10 @@ import 'package:trip_planner_ui/models/activity.dart';
 import 'package:trip_planner_ui/views/widgets/my_textfield.dart';
 
 class ActivityDialog extends StatefulWidget {
-  final DateTime maxDate; // Add maxDate as a required parameter
+  final DateTime minDate; 
+  final DateTime maxDate; 
 
-  const ActivityDialog({required this.maxDate, Key? key}) : super(key: key);
+  const ActivityDialog({required this.maxDate, required this.minDate, Key? key}) : super(key: key);
 
   @override
   _ActivityDialogState createState() => _ActivityDialogState();
@@ -41,8 +42,8 @@ class _ActivityDialogState extends State<ActivityDialog> {
                 onPressed: () async {
                   final DateTime? date = await showDatePicker(
                     context: context,
-                    initialDate: selectedDate ?? DateTime.now(),
-                    firstDate: DateTime.now(),
+                    initialDate: widget.minDate,
+                    firstDate: widget.minDate,
                     lastDate: widget.maxDate,
                   );
                   setState(() {

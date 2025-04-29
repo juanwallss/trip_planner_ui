@@ -22,8 +22,8 @@ class _LoginFormState extends State<LoginForm> {
     emailController = TextEditingController();
     passwordController = TextEditingController();
 
-    emailController.text = '';
-    passwordController.text = '';
+    emailController.text = 'juan@example.com';
+    passwordController.text = '123456';
   }
 
   @override

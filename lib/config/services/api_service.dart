@@ -35,7 +35,7 @@ class ApiService {
     return response;
   }
 
-  Future<Map<String, dynamic>> delete(String endpoint) async {
+  Future<http.Response> delete(String endpoint) async {
     final response = await http.delete(
       Uri.parse("$baseUrl/$endpoint"),
       headers: {
@@ -43,7 +43,7 @@ class ApiService {
         "Authorization": "Bearer $token",
       },
     );
-    return jsonDecode(response.body);
+    return response;
   }
 
   Future<Map<String, dynamic>> put(String endpoint, Map<String, dynamic> data,

@@ -27,7 +27,7 @@ class CardWidget extends StatelessWidget {
       ),
       elevation: 5,
       color: colors.surfaceContainer,
-      margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
+      margin: const EdgeInsets.only(top: 5, left: 5, right: 5),
       child: ConstrainedBox(
         constraints: BoxConstraints(
           minHeight: height ?? 150, // Default height
@@ -42,7 +42,8 @@ class CardWidget extends StatelessWidget {
               ),
               subtitle: Text(
                 subtitle,
-                style: TextStyle(color: colors.secondary, fontWeight: FontWeight.w300),
+                style: TextStyle(
+                    color: colors.secondary, fontWeight: FontWeight.w300),
               ),
             ),
             OverflowBar(
@@ -50,7 +51,8 @@ class CardWidget extends StatelessWidget {
               children: [
                 TextButton(
                   onPressed: onEdit,
-                  child: Text('Editar', style: TextStyle(color: colors.primary)),
+                  child:
+                      Text('Editar', style: TextStyle(color: colors.primary)),
                 ),
                 TextButton(
                   onPressed: onDelete,

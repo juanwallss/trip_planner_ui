@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:trip_planner_ui/views/itinerary/itinerary_detail_screen.dart';
 import 'package:trip_planner_ui/views/screens.dart';
 
 final List<RouteBase> routes = [
@@ -23,4 +24,13 @@ final List<RouteBase> routes = [
     name: ItineraryScreen.screenName,
     builder: (BuildContext context, GoRouterState state) => const ItineraryScreen(),
   ),
+  GoRoute(
+    path: '/itinerary/:id',
+    name: 'itinerary_detail_screen',
+    builder: (BuildContext context, GoRouterState state) {
+      final id = state.pathParameters['id'];
+      
+      return ItineraryDetailScreen(id: int.parse(id!));
+    },
+  )
 ];

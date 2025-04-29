@@ -15,4 +15,14 @@ class ItineraryList {
       itineraries: itineraries,
     );
   }
+
+  void insertItinerary(Itinerary itinerary) {
+    itineraries.add(itinerary);
+  }
+  void removeItinerary(Itinerary itinerary) {
+    itineraries.remove(itinerary);
+  }
+  void removeById(String id) {
+    itineraries.removeWhere((itinerary) => itinerary.id == id);
+  }
 }
