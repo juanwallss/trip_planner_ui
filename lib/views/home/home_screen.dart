@@ -34,12 +34,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var itineraries = ref.watch(itinerariesProvider);
-
-    // if (itineraries.isEmpty) {
-    //   itineraries = presenter.getItineraries() as List<Itinerary>;
-    // }
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Itinerarios'),
@@ -55,30 +49,50 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         },
         child: const Icon(Icons.add),
       ),
-      body: Center(
-        child: itineraries.isEmpty
-            ? const Text(
-                'Crea tu primer Itinerario!',
+      body: FutureBuilder<List<Itinerary>>(
+        future: itinerariesFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            print('snapshot error: ${snapshot.error}');
+            return const Center(
+              child: Text(
+                'Error al cargar los itinerarios',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-              )
-            : ListView(
-                children: itineraries.map((itinerary) {
-                  return CardWidget(
-                    title: itinerary.titulo,
-                    subtitle: itinerary.descripcion,
-                    onEdit: () {
-                      context.pushNamed(
-                        'itinerary_detail_screen',
-                        pathParameters: {'id': itinerary.id.toString()},
-                      );
-                    },
-                    onDelete: () {
-                      // TODO: Implement delete
-                      _showDeleteDialog(context, itinerary.id);
-                    },
-                  );
-                }).toList(),
               ),
+            );
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(
+              child: Text(
+                'Agrega tus itinerarios!',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              ),
+            );
+          } else {
+            final itineraries = snapshot.data!;
+            return ListView(
+              children: itineraries.map((itinerary) {
+                return CardWidget(
+                  title: itinerary.titulo,
+                  subtitle: itinerary.descripcion,
+                  onEditText: 'Detalles',
+                  onEdit: () {
+                    context.pushNamed(
+                      'itinerary_detail_screen',
+                      pathParameters: {'id': itinerary.id.toString()},
+                    );
+                  },
+                  onDelete: () {
+                    _showDeleteDialog(context, itinerary.id);
+                  },
+                );
+              }).toList(),
+            );
+          }
+        },
       ),
     );
   }

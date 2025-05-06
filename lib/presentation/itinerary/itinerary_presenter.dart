@@ -32,4 +32,23 @@ class ItineraryPresenter {
 
     return success;
   }
+
+  Future<bool> updateItinerary(Itinerary itinerary, WidgetRef ref) async {
+    loading = true;
+    bool success = false;
+    final response =
+        await apiService.put('itineraries/${itinerary.id}', itinerary.toJson());
+
+    if (response.statusCode == 200) {
+      final responseBody = response.body;
+      print('Itinerary updated successfully: $responseBody');
+      success = true;
+      ref.read(itinerariesProvider.notifier).updateItinerary(itinerary);
+    } else {
+      print('Error updating itinerary: ${response.statusCode}');
+      print('Response body: ${response.body}');
+    }
+
+    return success;
+  }
 }

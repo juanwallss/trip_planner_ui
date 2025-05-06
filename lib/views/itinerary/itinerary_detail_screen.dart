@@ -19,10 +19,19 @@ class ItineraryDetailScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detalles del Itinerario'),
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          context.pushNamed('itinerary_edit_screen', pathParameters: {
+            'id': selectedItinerary.id.toString(),
+          });
+        },
+        child: const Icon(Icons.edit),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -43,8 +52,8 @@ class ItineraryDetailScreen extends ConsumerWidget {
               'Fechas:',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            Text('Inicio: ${selectedItinerary.fechaInicio}'),
-            Text('Fin: ${selectedItinerary.fechaFin}'),
+            Text('Inicio: ${DateTime.parse(selectedItinerary.fechaInicio).toLocal()}'),
+            Text('Fin: ${DateTime.parse(selectedItinerary.fechaFin).toLocal()}'),
             const SizedBox(height: 16),
             const Text(
               'Destino:',

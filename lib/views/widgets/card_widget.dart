@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class CardWidget extends StatelessWidget {
   final String title;
   final String subtitle;
-  final VoidCallback onEdit;
-  final VoidCallback onDelete;
+  final VoidCallback? onEdit; // Made nullable
+  final VoidCallback? onDelete; // Made nullable
+  final String onEditText; // Customizable text for the "Edit" button
   final double? height;
   final double? width;
 
@@ -12,8 +13,9 @@ class CardWidget extends StatelessWidget {
     super.key,
     required this.title,
     required this.subtitle,
-    required this.onEdit,
-    required this.onDelete,
+    this.onEdit, // Nullable, optional
+    this.onDelete, // Nullable, optional
+    this.onEditText = 'Editar', // Default value for the "Edit" button text
     this.height,
     this.width,
   });
@@ -43,23 +45,27 @@ class CardWidget extends StatelessWidget {
               subtitle: Text(
                 subtitle,
                 style: TextStyle(
-                    color: colors.secondary, fontWeight: FontWeight.w300),
+                  color: colors.secondary,
+                  fontWeight: FontWeight.w300,
+                ),
               ),
             ),
-            OverflowBar(
-              alignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: onEdit,
-                  child:
-                      Text('Editar', style: TextStyle(color: colors.primary)),
-                ),
-                TextButton(
-                  onPressed: onDelete,
-                  child: const Text('Eliminar'),
-                ),
-              ],
-            ),
+            if (onEdit != null || onDelete != null) // Show actions only if at least one is provided
+              OverflowBar(
+                alignment: MainAxisAlignment.end,
+                children: [
+                  if (onEdit != null) // Show "Edit" button only if onEdit is provided
+                    TextButton(
+                      onPressed: onEdit,
+                      child: Text(onEditText, style: TextStyle(color: colors.primary)),
+                    ),
+                  if (onDelete != null) // Show "Delete" button only if onDelete is provided
+                    TextButton(
+                      onPressed: onDelete,
+                      child: const Text('Eliminar'),
+                    ),
+                ],
+              ),
           ],
         ),
       ),

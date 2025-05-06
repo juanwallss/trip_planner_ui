@@ -5,6 +5,7 @@ class MyButton extends StatelessWidget {
   final String? text; // Made nullable
   final IconData? icon; // Optional icon
   final double? width; // Optional width
+  final double? height; // Optional width
 
   const MyButton({
     super.key,
@@ -12,6 +13,7 @@ class MyButton extends StatelessWidget {
     this.text, // Nullable text
     this.icon,
     this.width,
+    this.height,
   });
 
   @override
@@ -23,6 +25,7 @@ class MyButton extends StatelessWidget {
         padding: const EdgeInsets.all(22),
         margin: const EdgeInsets.symmetric(horizontal: 25),
         width: width, // Use the provided width if available
+        height: height,
         decoration: BoxDecoration(
           color: colors.primary,
           borderRadius: BorderRadius.circular(24),

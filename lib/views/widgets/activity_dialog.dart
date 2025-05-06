@@ -4,10 +4,11 @@ import 'package:trip_planner_ui/models/activity.dart';
 import 'package:trip_planner_ui/views/widgets/my_textfield.dart';
 
 class ActivityDialog extends StatefulWidget {
-  final DateTime minDate; 
-  final DateTime maxDate; 
+  final DateTime minDate;
+  final DateTime maxDate;
 
-  const ActivityDialog({required this.maxDate, required this.minDate, Key? key}) : super(key: key);
+  const ActivityDialog({required this.maxDate, required this.minDate, Key? key})
+      : super(key: key);
 
   @override
   _ActivityDialogState createState() => _ActivityDialogState();
@@ -21,6 +22,7 @@ class _ActivityDialogState extends State<ActivityDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return AlertDialog(
       title: const Text('Agregar Actividad'),
       content: Column(
@@ -38,7 +40,7 @@ class _ActivityDialogState extends State<ActivityDialog> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TextButton(
+              ElevatedButton(
                 onPressed: () async {
                   final DateTime? date = await showDatePicker(
                     context: context,
@@ -56,7 +58,7 @@ class _ActivityDialogState extends State<ActivityDialog> {
                         'Fecha: ${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}',
                       ),
               ),
-              TextButton(
+              ElevatedButton(
                 onPressed: () async {
                   final TimeOfDay? time = await showTimePicker(
                     context: context,
@@ -77,11 +79,20 @@ class _ActivityDialogState extends State<ActivityDialog> {
         ],
       ),
       actions: [
-        TextButton(
+        ElevatedButton(
           onPressed: () => context.pop(),
-          child: const Text('Cancelar'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: colors.tertiary,
+          ),
+          child: const Text('Cancelar',
+              style: TextStyle(
+                color: Colors.white,
+              )),
         ),
-        TextButton(
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: colors.primary,
+          ),
           onPressed: () {
             if (nameController.text.isNotEmpty &&
                 descriptionController.text.isNotEmpty &&
@@ -97,7 +108,10 @@ class _ActivityDialogState extends State<ActivityDialog> {
               );
             }
           },
-          child: const Text('Agregar'),
+          child: const Text('Agregar',
+              style: TextStyle(
+                color: Colors.white,
+              )),
         ),
       ],
     );

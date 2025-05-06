@@ -26,6 +26,16 @@ class ItineraryNotifier extends StateNotifier<List<Itinerary>> {
   void removeItinerary(int id) {
     state = state.where((itinerary) => itinerary.id != id).toList();
   }
+
+  void updateItinerary(Itinerary itinerary) {
+    state = state.map((existingItinerary) {
+      if (existingItinerary.id == itinerary.id) {
+        return itinerary;
+      } else {
+        return existingItinerary;
+      }
+    }).toList();
+  }
 }
 
 // StateNotifierProvider for itineraries

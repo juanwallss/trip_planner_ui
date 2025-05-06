@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:trip_planner_ui/views/itinerary/itinerary_form.dart';
 
 class ItineraryScreen extends StatelessWidget {
@@ -8,12 +7,6 @@ class ItineraryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Crea tu itinerario'),
-      ),
-      body: ItineraryForm(),
-    );
+    return ItineraryForm();
   }
 }

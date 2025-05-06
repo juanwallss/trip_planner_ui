@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trip_planner_ui/config/services/api_service.dart';
 import 'package:trip_planner_ui/provider/itinerary_provider.dart';
 import 'package:trip_planner_ui/provider/user_provider.dart';
@@ -80,6 +81,8 @@ class HomePresenter {
     final responseBody = jsonDecode(response.body);
     if (response.statusCode == 200) {
       clearUser();
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
       ref.read(itinerariesProvider.notifier).clearItineraries();
       context.pushNamed('login_screen');
     } else {
