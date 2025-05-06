@@ -20,7 +20,11 @@ class MainApp extends ConsumerWidget {
       builder: (context, child) {
         return SafeArea(child: child!);
       },
-      localizationsDelegates: const [GlobalMaterialLocalizations.delegate],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       supportedLocales: const [
         Locale('es', 'ES'),
       ],

@@ -15,10 +15,12 @@ class ItineraryDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedItinerary = ref.read(itinerariesProvider).firstWhere((itinerary) => itinerary.id == id);
+    var theme = Theme.of(context);
+    var size = MediaQuery.of(context).size;
     
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detalles del Itinerario'),
+        title: Text(selectedItinerary.titulo),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -39,21 +41,23 @@ class ItineraryDetailScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              selectedItinerary.titulo,
-              style: Theme.of(context).textTheme.headlineMedium,
+              'Descripción:',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: size.width * 0.1),
             ),
             const SizedBox(height: 8),
             Text(
               selectedItinerary.descripcion,
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: theme.textTheme.headlineLarge,
             ),
             const SizedBox(height: 16),
-            const Text(
+            Text(
               'Fechas:',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: theme.textTheme.headlineSmall?.fontSize),
             ),
-            Text('Inicio: ${DateTime.parse(selectedItinerary.fechaInicio).toLocal()}'),
-            Text('Fin: ${DateTime.parse(selectedItinerary.fechaFin).toLocal()}'),
+            Text('Inicio: ${parseDate(selectedItinerary.fechaInicio)}',
+              style: TextStyle(fontSize: size.width * 0.08)),
+            Text('Fin: ${parseDate(selectedItinerary.fechaFin)}',
+              style: TextStyle(fontSize: size.width * 0.08)),
             const SizedBox(height: 16),
             const Text(
               'Destino:',
@@ -81,4 +85,9 @@ class ItineraryDetailScreen extends ConsumerWidget {
       ),
     );
   }
+}
+
+String parseDate(String date) {
+  final parsedDate = DateTime.parse(date);
+  return '${parsedDate.day}/${parsedDate.month}/${parsedDate.year}';
 }

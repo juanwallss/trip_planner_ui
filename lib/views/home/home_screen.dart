@@ -73,8 +73,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             );
           } else {
             final itineraries = snapshot.data!;
-            return ListView(
-              children: itineraries.map((itinerary) {
+            return ListView.separated(
+              padding: const EdgeInsets.all(8.0),
+              itemBuilder: (context, index) {
+                final itinerary = itineraries[index];
                 return CardWidget(
                   title: itinerary.titulo,
                   subtitle: itinerary.descripcion,
@@ -89,7 +91,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     _showDeleteDialog(context, itinerary.id);
                   },
                 );
-              }).toList(),
+              },
+              separatorBuilder: (context, index) => const SizedBox(height: 14.0),
+              itemCount: itineraries.length,
             );
           }
         },
@@ -102,7 +106,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Eliminar Itinerario'),
-        content: const Text('¿Estás seguro de que quieres eliminar este itinerario?'),
+        content: const Text(
+            '¿Estás seguro de que quieres eliminar este itinerario?'),
         actions: [
           TextButton(
             onPressed: () => context.pop(),
@@ -112,10 +117,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             onPressed: () async {
               presenter.deleteItinerary(id, context);
             },
-            child: const Text('Eliminar'),  
+            child: const Text('Eliminar'),
           ),
         ],
-      ),);}
+      ),
+    );
+  }
 
   void _showLogoutDialog(BuildContext context) {
     showDialog(

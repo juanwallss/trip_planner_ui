@@ -48,11 +48,11 @@ class _ItineraryEditScreenState extends ConsumerState<ItineraryEditScreen> {
     titleController = TextEditingController(text: selectedItinerary.titulo);
     descriptionController =
         TextEditingController(text: selectedItinerary.descripcion);
-    dateRangeController = TextEditingController(
-        text:
-            '${selectedItinerary.fechaInicio} - ${selectedItinerary.fechaFin}');
     fromDateController = DateTime.parse(selectedItinerary.fechaInicio);
     toDateController = DateTime.parse(selectedItinerary.fechaFin);
+    dateRangeController = TextEditingController(
+        text:
+          'Desde: ${fromDateController!.day}/${fromDateController!.month}/${fromDateController!.year} \n Hasta: ${toDateController!.day}/${toDateController!.month}/${toDateController!.year}');
     latitudeController = selectedItinerary.latitud;
     longitudeController = selectedItinerary.longitud;
   }
