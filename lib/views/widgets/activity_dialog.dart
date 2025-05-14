@@ -106,6 +106,14 @@ class _ActivityDialogState extends State<ActivityDialog> {
                   hora: selectedTime!,
                 ),
               );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  backgroundColor: Colors.red,
+                  duration: Duration(seconds: 2),
+                  content: Text('Por favor completa todos los campos'),
+                ),
+              );
             }
           },
           child: const Text('Agregar',

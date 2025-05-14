@@ -28,16 +28,15 @@ class HomePresenter {
     }
   }
 
-  Future<List<Itinerary>> getItineraries() async {
+  void getItineraries() async {
     final itineraries = ref.read(itinerariesProvider);
     if (itineraries.isNotEmpty) {
       print('Itineraries already loaded: $itineraries');
-      return itineraries;
     }
     final user = ref.read(userProvider);
     if (user == null) {
       print('No user found');
-      return [];
+      return;
     }
     final response = await apiService.get('itineraries/${user.id}');
 
@@ -47,13 +46,10 @@ class HomePresenter {
           itinerariesJson.map((json) => Itinerary.fromJson(json)).toList();
       print('Itineraries: $itineraries');
       ref.read(itinerariesProvider.notifier).setItineraries(itineraries);
-      return itineraries.cast<Itinerary>();
     } else {
       print('Error fetching itineraries: ${response.statusCode}');
       print('Response body: ${response.body}');
     }
-
-    return [];
   }
 
   void deleteItinerary(int? id, BuildContext context) async {

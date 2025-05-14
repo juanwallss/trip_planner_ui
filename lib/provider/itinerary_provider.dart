@@ -11,7 +11,7 @@ class ItineraryNotifier extends StateNotifier<List<Itinerary>> {
 
   void addItinerary(Itinerary itinerary) {
     print('Adding itinerary: $itinerary');
-    state = [...state, itinerary];
+    state = [itinerary,...state];
     print('Itinerary added: $state');
   }
 

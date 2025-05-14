@@ -22,7 +22,7 @@ class MyButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(22),
+        padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.symmetric(horizontal: 25),
         width: width, // Use the provided width if available
         height: height,

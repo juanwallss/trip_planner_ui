@@ -48,16 +48,19 @@ class MyTextField extends StatelessWidget {
               ),
               child: TextField(
                 controller: controller,
+                onEditingComplete: onIconPressed,
                 obscureText: obscureText,
-                enabled: !disabled, // Disable the field if `disabled` is true
+                enabled: !disabled,
                 decoration: InputDecoration(
+                  labelText: hintText,
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(20.0),
                     borderSide: BorderSide(
                       color: colors.primary,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(17.0),
                     borderSide: BorderSide(
                       color: colors.primary,
                     ),

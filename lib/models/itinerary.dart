@@ -1,7 +1,7 @@
 import 'package:trip_planner_ui/models/activity.dart';
 
 class Itinerary {
-  final int? id;
+  late final int? id;
   final String titulo;
   final String descripcion;
   final String destino;
@@ -33,7 +33,7 @@ class Itinerary {
         fechaFin: json['fechaFin'],
         latitud: json['latitud'],
         longitud: json['longitud'],
-        actividades: (json['actividades'] as List<dynamic>)
+        actividades: (json['actividades'] as List<dynamic>? ?? [])
             .map((activityJson) => Activity.fromJson(activityJson))
             .toList());
   }

@@ -5,6 +5,7 @@ import 'package:trip_planner_ui/models/activity.dart';
 import 'package:trip_planner_ui/models/itinerary.dart';
 import 'package:trip_planner_ui/presentation/itinerary/itinerary_presenter.dart';
 import 'package:trip_planner_ui/provider/itinerary_provider.dart';
+import 'package:trip_planner_ui/views/widgets/activity_card_widget.dart';
 import 'package:trip_planner_ui/views/widgets/activity_dialog.dart';
 import 'package:trip_planner_ui/views/widgets/card_widget.dart';
 import 'package:trip_planner_ui/views/widgets/map_widget.dart';
@@ -52,7 +53,7 @@ class _ItineraryEditScreenState extends ConsumerState<ItineraryEditScreen> {
     toDateController = DateTime.parse(selectedItinerary.fechaFin);
     dateRangeController = TextEditingController(
         text:
-          'Desde: ${fromDateController!.day}/${fromDateController!.month}/${fromDateController!.year} \n Hasta: ${toDateController!.day}/${toDateController!.month}/${toDateController!.year}');
+            'Desde: ${fromDateController!.day}/${fromDateController!.month}/${fromDateController!.year} \n Hasta: ${toDateController!.day}/${toDateController!.month}/${toDateController!.year}');
     latitudeController = selectedItinerary.latitud;
     longitudeController = selectedItinerary.longitud;
   }
@@ -83,6 +84,8 @@ class _ItineraryEditScreenState extends ConsumerState<ItineraryEditScreen> {
       activities.removeAt(index);
     });
   }
+
+  Future<Map<String, Object>> Function(String)? _searchLocationOnMap;
 
   void _updateItinerary(BuildContext context) async {
     Future<bool> success = widget.presenter.updateItinerary(
@@ -162,6 +165,10 @@ class _ItineraryEditScreenState extends ConsumerState<ItineraryEditScreen> {
                 height: size.height * .4,
                 width: size.width,
                 child: MapWidget(
+                  onMapReady: (searchFunction) {
+                    _searchLocationOnMap = searchFunction
+                        as Future<Map<String, Object>> Function(String);
+                  },
                   initialCityName: destinationController.text.isNotEmpty
                       ? destinationController.text
                       : null,
@@ -178,6 +185,34 @@ class _ItineraryEditScreenState extends ConsumerState<ItineraryEditScreen> {
                     });
                   },
                 ),
+              ),
+              SizedBox(height: size.height * .02),
+              MyTextField(
+                controller: destinationController,
+                hintText: 'Destino',
+                icon: Icons.search,
+                onIconPressed: () {
+                  if (_searchLocationOnMap != null &&
+                      destinationController.text.isNotEmpty) {
+                  print('Buscando: ${destinationController.text}');
+                    _searchLocationOnMap!(destinationController.text)
+                        .then((location) {
+                      setState(() {
+                        latitudeController = location['latitude'] as double;
+                        longitudeController = location['longitude'] as double;
+                      });
+                    }).catchError((error) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content:
+                              Text("Ha ocurrido un error: ${error.toString()}"),
+                          duration: const Duration(seconds: 2),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    });
+                  }
+                },
               ),
               SizedBox(height: size.height * .01),
               MyTextField(
@@ -220,9 +255,13 @@ class _ItineraryEditScreenState extends ConsumerState<ItineraryEditScreen> {
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: activities.length,
                         itemBuilder: (context, index) {
-                          return CardWidget(
+                          return ActivityCardWidget(
                             title: activities[index].titulo,
                             subtitle: activities[index].descripcion,
+                            time:
+                                '${activities[index].hora.hour}:${activities[index].hora.minute}',
+                            date:
+                                '${activities[index].fecha.day}/${activities[index].fecha.month}/${activities[index].fecha.year}',
                             onDelete: () => _removeActivity(index),
                           );
                         },

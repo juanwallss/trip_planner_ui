@@ -13,6 +13,7 @@ class MapWidget extends StatefulWidget {
   final String? initialCityName; // Optional initial city name
   final double? initialLatitude; // Optional initial latitude
   final double? initialLongitude; // Optional initial longitude
+  final Function(Function)? onMapReady; // Callback to provide search function to parent
 
   const MapWidget({
     super.key,
@@ -20,6 +21,7 @@ class MapWidget extends StatefulWidget {
     this.initialCityName,
     this.initialLatitude,
     this.initialLongitude,
+    this.onMapReady,
   });
 
   @override
@@ -34,9 +36,7 @@ class _MapWidgetState extends State<MapWidget> {
 
   static const LatLng _defaultCenter = LatLng(32.6245389, -115.4522623);
   LatLng? _currentPosition;
-  late CameraPosition initialCameraPosition;
-
-  @override
+  late CameraPosition initialCameraPosition;  @override
   void initState() {
     super.initState();
 
@@ -46,11 +46,18 @@ class _MapWidgetState extends State<MapWidget> {
       initialCameraPosition = CameraPosition(target: _currentPosition!, zoom: 12.0);
     } else {
       initialCameraPosition = CameraPosition(target: _defaultCenter, zoom: 11.0);
+      // Initialize location controller to check for permissions
+      _locationController.hasPermission();
     }
 
     // Set initial search text if city name is provided
     if (widget.initialCityName != null) {
       _searchController.text = widget.initialCityName!;
+    }
+    
+    // Provide searchLocation function to parent widget if callback is provided
+    if (widget.onMapReady != null) {
+      widget.onMapReady!(searchLocation);
     }
   }
 
@@ -117,6 +124,7 @@ class _MapWidgetState extends State<MapWidget> {
             onMapCreated: (GoogleMapController controller) {
               _mapController = controller;
             },
+            zoomControlsEnabled : false,
             markers: _currentPosition != null
                 ? {
                     Marker(
@@ -128,15 +136,15 @@ class _MapWidgetState extends State<MapWidget> {
                 : {},
           ),
         ),
-        SizedBox(height: size.height * .03),
-        MyTextField(
-          controller: _searchController,
-          hintText: 'Buscar ciudad',
-          icon: Icons.search,
-          onIconPressed: () {
-            searchLocation(_searchController.text);
-          },
-        ),
+        // SizedBox(height: size.height * .03),
+        // MyTextField(
+        //   controller: _searchController,
+        //   hintText: 'Buscar ciudad',
+        //   icon: Icons.search,
+        //   onIconPressed: () {
+        //     searchLocation(_searchController.text);
+        //   },
+        // ),
       ],
     );
   }

@@ -19,56 +19,128 @@ class CardWidget extends StatelessWidget {
     this.height,
     this.width,
   });
-
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      elevation: 5,
-      color: colors.surfaceContainer,
-      margin: const EdgeInsets.only(top: 5, left: 5, right: 5),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          minHeight: height ?? 150, // Default height
-          minWidth: width ?? double.infinity, // Default width
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(color: colors.primary.withOpacity(0.2), width: 1),
         ),
-        child: Column(
-          children: [
-            ListTile(
-              title: Text(
-                title,
-                style: TextStyle(color: colors.primary, fontSize: 20),
-              ),
-              subtitle: Text(
-                subtitle,
-                style: TextStyle(
-                  color: colors.secondary,
-                  fontWeight: FontWeight.w300,
-                ),
-              ),
+        elevation: 8,
+        shadowColor: colors.primary.withOpacity(0.4),
+        margin: const EdgeInsets.only(top: 5, left: 5, right: 5),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                colors.surfaceContainer,
+                colors.surfaceContainer
+                    .withBlue(colors.surfaceContainer.blue + 15),
+              ],
             ),
-            if (onEdit != null || onDelete != null) // Show actions only if at least one is provided
-              OverflowBar(
-                alignment: MainAxisAlignment.end,
-                children: [
-                  if (onEdit != null) // Show "Edit" button only if onEdit is provided
-                    TextButton(
-                      onPressed: onEdit,
-                      child: Text(onEditText, style: TextStyle(color: colors.primary)),
+          ),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: height ?? 150, // Default height
+              minWidth: width ?? double.infinity, // Default width
+            ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: colors.primary.withOpacity(0.15),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          Icons.map_outlined,
+                          color: colors.primary,
+                          size: 28,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              title,
+                              style: TextStyle(
+                                color: colors.primary,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              subtitle,
+                              style: TextStyle(
+                                color: colors.secondary,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                height: 1.3,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(height: 1, thickness: 1),
+                if (onEdit != null ||
+                    onDelete !=
+                        null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        if (onEdit !=
+                            null)
+                          TextButton.icon(
+                            onPressed: onEdit,
+                            icon: Icon(Icons.visibility,
+                                size: 18, color: colors.primary),
+                            label: Text(
+                              onEditText,
+                              style: TextStyle(
+                                color: colors.primary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        if (onDelete !=
+                            null) // Show "Delete" button only if onDelete is provided
+                          TextButton.icon(
+                            onPressed: onDelete,
+                            icon: const Icon(Icons.delete_outline,
+                                size: 18, color: Colors.red),
+                            label: const Text(
+                              'Eliminar',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
-                  if (onDelete != null) // Show "Delete" button only if onDelete is provided
-                    TextButton(
-                      onPressed: onDelete,
-                      child: const Text('Eliminar'),
-                    ),
-                ],
-              ),
-          ],
-        ),
-      ),
-    );
+                  ),
+              ],
+            ),
+          ),
+        ));
   }
 }

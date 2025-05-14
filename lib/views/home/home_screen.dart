@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trip_planner_ui/models/itinerary.dart';
 import 'package:trip_planner_ui/presentation/home/home_presenter.dart';
 import 'package:trip_planner_ui/provider/itinerary_provider.dart';
 import 'package:trip_planner_ui/views/widgets/widgets.dart';
@@ -17,23 +16,23 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   late final HomePresenter presenter;
-  late Future<List<Itinerary>> itinerariesFuture;
 
   @override
   void initState() {
     super.initState();
     presenter = HomePresenter(ref);
     presenter.getUser();
-    itinerariesFuture = presenter.getItineraries();
+    presenter.getItineraries();
   }
 
   @override
   void dispose() {
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
+    final itineraries = ref.watch(itinerariesProvider);
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text('Itinerarios'),
@@ -49,31 +48,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         },
         child: const Icon(Icons.add),
       ),
-      body: FutureBuilder<List<Itinerary>>(
-        future: itinerariesFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            print('snapshot error: ${snapshot.error}');
-            return const Center(
-              child: Text(
-                'Error al cargar los itinerarios',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-              ),
-            );
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(
+      body: itineraries.isEmpty
+          ? const Center(
               child: Text(
                 'Agrega tus itinerarios!',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
               ),
-            );
-          } else {
-            final itineraries = snapshot.data!;
-            return ListView.separated(
+            )
+          : ListView.separated(
               padding: const EdgeInsets.all(8.0),
               itemBuilder: (context, index) {
                 final itinerary = itineraries[index];
@@ -94,10 +76,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               },
               separatorBuilder: (context, index) => const SizedBox(height: 14.0),
               itemCount: itineraries.length,
-            );
-          }
-        },
-      ),
+            ),
     );
   }
 
