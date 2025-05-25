@@ -53,7 +53,7 @@ class _ItineraryEditScreenState extends ConsumerState<ItineraryEditScreen> {
     toDateController = DateTime.parse(selectedItinerary.fechaFin);
     dateRangeController = TextEditingController(
         text:
-            'Desde: ${fromDateController!.day}/${fromDateController!.month}/${fromDateController!.year} \n Hasta: ${toDateController!.day}/${toDateController!.month}/${toDateController!.year}');
+            'Desde: ${fromDateController!.day}/${fromDateController!.month}/${fromDateController!.year} - Hasta: ${toDateController!.day}/${toDateController!.month}/${toDateController!.year}');
     latitudeController = selectedItinerary.latitud;
     longitudeController = selectedItinerary.longitud;
   }
@@ -194,7 +194,7 @@ class _ItineraryEditScreenState extends ConsumerState<ItineraryEditScreen> {
                 onIconPressed: () {
                   if (_searchLocationOnMap != null &&
                       destinationController.text.isNotEmpty) {
-                  print('Buscando: ${destinationController.text}');
+                    print('Buscando: ${destinationController.text}');
                     _searchLocationOnMap!(destinationController.text)
                         .then((location) {
                       setState(() {
@@ -225,6 +225,13 @@ class _ItineraryEditScreenState extends ConsumerState<ItineraryEditScreen> {
                 hintText: 'Descripcion',
               ),
               SizedBox(height: size.height * .01),
+              if (fromDateController != null && toDateController != null)
+                Text(
+                  dateRangeController.text,
+                  style: const TextStyle(fontSize: 16),
+                ),
+              SizedBox(height: size.height * .01),
+              
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -235,38 +242,6 @@ class _ItineraryEditScreenState extends ConsumerState<ItineraryEditScreen> {
                     text: 'Fechas',
                     onTap: () => _selectDateRange(context),
                   ),
-                  const SizedBox(width: 10),
-                  if (fromDateController != null && toDateController != null)
-                    Text(
-                      dateRangeController.text,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                ],
-              ),
-              SizedBox(height: size.height * .02),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (activities.isNotEmpty)
-                    Expanded(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: activities.length,
-                        itemBuilder: (context, index) {
-                          return ActivityCardWidget(
-                            title: activities[index].titulo,
-                            subtitle: activities[index].descripcion,
-                            time:
-                                '${activities[index].hora.hour}:${activities[index].hora.minute}',
-                            date:
-                                '${activities[index].fecha.day}/${activities[index].fecha.month}/${activities[index].fecha.year}',
-                            onDelete: () => _removeActivity(index),
-                          );
-                        },
-                      ),
-                    ),
                   const SizedBox(width: 10),
                   ElevatedButton(
                     onPressed: () async {
@@ -285,6 +260,61 @@ class _ItineraryEditScreenState extends ConsumerState<ItineraryEditScreen> {
                     },
                     child: const Text('Agregar Actividad'),
                   ),
+                ],
+              ),
+              SizedBox(height: size.height * .02),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (activities.isNotEmpty)
+                    Expanded(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: activities.length,
+                        itemBuilder: (context, index) {
+                          return Dismissible(
+                            key: ValueKey(activities[index].titulo),
+                            onDismissed: (direction) => _removeActivity(index),
+                            background: Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.red,
+                              ),
+                              alignment: Alignment.centerLeft,
+                              padding: const EdgeInsets.only(right: 20),
+                              child:
+                                  const Icon(Icons.delete, color: Colors.white),
+                            ),
+                            secondaryBackground: Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.red,
+                              ),
+                              alignment: Alignment.centerLeft,
+                              padding: const EdgeInsets.only(right: 20),
+                              child:
+                                  const Icon(Icons.delete, color: Colors.white),
+                            ),
+                            child: ActivityCardWidget(
+                              title: activities[index].titulo,
+                              subtitle: activities[index].descripcion,
+                              time:
+                                  '${activities[index].hora.hour}:${activities[index].hora.minute}',
+                              date:
+                                  '${activities[index].fecha.day}/${activities[index].fecha.month}/${activities[index].fecha.year}',
+                              // onDelete: () => _removeActivity(index),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  const SizedBox(width: 10),
                 ],
               ),
             ],

@@ -41,7 +41,7 @@ class ItineraryDetailUtils {
 
     buffer.writeln('');
     buffer.writeln('------------------------');
-    buffer.writeln('Compartido desde Trip Planner App');
+    buffer.writeln('Compartido desde My Trip Planner App');
 
     return buffer.toString();
   }

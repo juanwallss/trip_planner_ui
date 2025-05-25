@@ -32,6 +32,7 @@ class _ActivityDialogState extends State<ActivityDialog> {
             controller: nameController,
             hintText: 'Nombre de la actividad',
           ),
+          const SizedBox(height: 10),
           MyTextField(
             controller: descriptionController,
             hintText: 'Descripción de la actividad',
@@ -58,6 +59,7 @@ class _ActivityDialogState extends State<ActivityDialog> {
                         'Fecha: ${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}',
                       ),
               ),
+              const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () async {
                   final TimeOfDay? time = await showTimePicker(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:trip_planner_ui/presentation/providers/theme_provider.dart';
 import 'package:trip_planner_ui/provider/itinerary_provider.dart';
 import 'package:trip_planner_ui/utils/itinerary_detail_utils.dart';
 
@@ -22,6 +23,7 @@ class ItineraryDetailScreen extends ConsumerWidget {
         .firstWhere((itinerary) => itinerary.id == id);
     var theme = Theme.of(context);
     var size = MediaQuery.of(context).size;
+    final isDarkmode = ref.watch(themeNotifierProvider).isDarkMode;
 
     return Scaffold(
       body: CustomScrollView(
@@ -31,7 +33,7 @@ class ItineraryDetailScreen extends ConsumerWidget {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
-                selectedItinerary.destino,
+                selectedItinerary.destino.toUpperCase(),
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
@@ -67,12 +69,12 @@ class ItineraryDetailScreen extends ConsumerWidget {
               ),
             ),
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.black),
+              icon: Icon(Icons.arrow_back, color: isDarkmode ? Colors.white : Colors.black),
               onPressed: () => context.pop(),
             ),
             actions: [
               IconButton(
-                icon: const Icon(Icons.copy, color: Colors.black),
+                icon: Icon(Icons.copy, color: isDarkmode ? Colors.white : Colors.black),
                 onPressed: () {
                   final tripDetails = ItineraryDetailUtils.formatTripDetails(selectedItinerary);
                   ItineraryDetailUtils.copyToClipboard(context, tripDetails);

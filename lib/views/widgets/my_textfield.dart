@@ -68,9 +68,9 @@ class MyTextField extends StatelessWidget {
                   filled: true,
                   fillColor: disabled
                       ? Colors.grey[300]
-                      : Colors.white, // Change background if disabled
+                      : colors.onPrimary, // Change background if disabled
                   hintText: hintText,
-                  hintStyle: const TextStyle(color: Colors.black, fontSize: 15),
+                  hintStyle: TextStyle(color: colors.secondary, fontSize: 15),
                   errorText: errorText, // Display error text
                   suffixIcon: icon != null
                       ? IconButton(
