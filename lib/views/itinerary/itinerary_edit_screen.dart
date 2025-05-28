@@ -296,7 +296,7 @@ class _ItineraryEditScreenState extends ConsumerState<ItineraryEditScreen> {
                                 borderRadius: BorderRadius.circular(12),
                                 color: Colors.red,
                               ),
-                              alignment: Alignment.centerLeft,
+                              alignment: Alignment.centerRight,
                               padding: const EdgeInsets.only(right: 20),
                               child:
                                   const Icon(Icons.delete, color: Colors.white),
