@@ -199,6 +199,12 @@ class _ItineraryFormState extends ConsumerState<ItineraryForm> {
                     hintText: 'Descripcion',
                   ),
                   SizedBox(height: size.height * .01),
+                  if (fromDateController != null && toDateController != null)
+                    Text(
+                      dateRangeController.text,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  SizedBox(height: size.height * .01),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -212,38 +218,6 @@ class _ItineraryFormState extends ConsumerState<ItineraryForm> {
                       const SizedBox(width: 10),
                       if (fromDateController != null &&
                           toDateController != null)
-                        Text(
-                          dateRangeController.text,
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                    ],
-                  ),
-                  SizedBox(height: size.height * .02),
-                  if (fromDateController != null && toDateController != null)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: 4,
-                      children: [
-                        if (activities.isNotEmpty)
-                          Expanded(
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: activities.length,
-                              itemBuilder: (context, index) {
-                                return ActivityCardWidget(
-                                  title: activities[index].titulo,
-                                  subtitle: activities[index].descripcion,
-                                  date:
-                                      "${activities[index].fecha.day}/${activities[index].fecha.month}/${activities[index].fecha.year}",
-                                  time:
-                                      "${activities[index].hora.hour}:${activities[index].hora.minute}",
-                                  onDelete: () => removeActivity(index),
-                                );
-                              },
-                            ),
-                          ),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: theme.primaryColor,
@@ -265,8 +239,55 @@ class _ItineraryFormState extends ConsumerState<ItineraryForm> {
                           },
                           child: const Text('Agregar Actividad'),
                         ),
-                      ],
-                    ),
+                    ],
+                  ),
+                  SizedBox(height: size.height * .02),
+                  if (fromDateController != null && toDateController != null)
+                    if (activities.isNotEmpty)
+                      Expanded(
+                        child: ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: activities.length,
+                          itemBuilder: (context, index) {
+                            return Dismissible(
+                              key: ValueKey(activities[index].titulo),
+                              onDismissed: (direction) => removeActivity(index),
+                              background: Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.red,
+                              ),
+                              alignment: Alignment.centerLeft,
+                              padding: const EdgeInsets.only(right: 20),
+                              child:
+                                  const Icon(Icons.delete, color: Colors.white),
+                            ),
+                            secondaryBackground: Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.red,
+                              ),
+                              alignment: Alignment.centerLeft,
+                              padding: const EdgeInsets.only(right: 20),
+                              child:
+                                  const Icon(Icons.delete, color: Colors.white),
+                            ),
+                              child: ActivityCardWidget(
+                                title: activities[index].titulo,
+                                subtitle: activities[index].descripcion,
+                                date:
+                                    "${activities[index].fecha.day}/${activities[index].fecha.month}/${activities[index].fecha.year}",
+                                time:
+                                    "${activities[index].hora.hour}:${activities[index].hora.minute}",
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                 ],
               ),
             ],
